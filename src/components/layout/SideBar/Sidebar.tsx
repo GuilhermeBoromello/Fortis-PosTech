@@ -15,7 +15,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <nav className="bg-primary-dark h-dvh px-4 py-6 flex flex-col justify-between items-center">
+    <nav className="bg-primary-dark h-dvh px-2 py-6 flex flex-col justify-between items-center">
       <div className="w-12 h-12 bg-background rounded-full"></div>
 
       <ul className="space-y-4">
@@ -25,7 +25,7 @@ export default function Sidebar() {
                 return (
                     <li key={index}>
                         <Link href={item.path} title={item.title}>
-                            <Icon size={24} color="#FFF" />
+                            <Icon size={18} color="#FFF" />
                         </Link>
                     </li>
                 )
@@ -33,8 +33,8 @@ export default function Sidebar() {
         }
       </ul>
 
-      <Link href={""}>
-        <DoorOpen size={24} color="#FFF" />
+      <Link href={"/login"}>
+        <DoorOpen size={18} color="#FFF" />
       </Link>
     </nav>
   );

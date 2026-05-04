@@ -1,31 +1,26 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
 import Sidebar from "@/components/layout/SideBar/Sidebar"
-import Header from "@/components/layout/Header/Header";
+import Header from "@/components/layout/Header/Header"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Fortis - Gestão Financeira",
-  description: "Sistema de gestão de transações financeiras",
-};
+    title: "Fortis - Gestão Financeira",
+    description: "Sistema de gestão de transações financeiras",
+}
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode
 }) {
-  return (
-    <html lang="pt-BR">
-      <body className={`${inter.className} bg-background text-text-primary flex max-w-dvw max-h-dvh`}>
-        <Sidebar />
-
-        <div className="flex-1 px-6 py-4">
-          <Header />
-          <main>{children}</main>
-        </div>
-      </body>
-    </html>
-  );
+    return (
+        <html lang="pt-BR">
+            <body className={`${inter.className} bg-background text-text-primary`}>
+                {children}
+            </body>
+        </html>
+    )
 }
