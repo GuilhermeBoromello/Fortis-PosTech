@@ -1,6 +1,6 @@
 // Interface Transação (id gerado automaticamente pelo json-server)
 export interface Transaction {
-  id: string
+  id: number
   type: 'deposit' | 'transfer'
   amount: number
   date: string

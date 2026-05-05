@@ -21,7 +21,7 @@ export async function addTransaction(transaction: Omit<Transaction, 'id'>): Prom
 
 // Partial<Transation> - utilizado no update pois pode ser que nem todos os campos sejam alterados
 // Trata todos os campos como opcionais
-export async function updateTransaction(id: string, transaction: Partial<Transaction>): Promise<Transaction> {
+export async function updateTransaction(id: number, transaction: Partial<Transaction>): Promise<Transaction> {
     const response = await fetch(`${BASE_URL}/transactions/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -31,7 +31,7 @@ export async function updateTransaction(id: string, transaction: Partial<Transac
     return response.json()
 }
 
-export async function deleteTransaction(id: string): Promise<void> {
+export async function deleteTransaction(id: number): Promise<void> {
     const response = await fetch(`${BASE_URL}/transactions/${id}`, {method: 'DELETE'})
     if (!response.ok) throw new Error('Erro ao deletar transação')
 }

@@ -17,8 +17,8 @@ interface TransactionContextType {
   error: string | null
   getTransactions: () => Promise<void>
   addTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<void>
-  updateTransaction: (id: string, transaction: Partial<Transaction>) => Promise<void>
-  deleteTransaction: (id: string) => Promise<void>
+  updateTransaction: (id: number, transaction: Partial<Transaction>) => Promise<void>
+  deleteTransaction: (id: number) => Promise<void>
 }
 
 const TransactionContext = createContext<TransactionContextType | undefined>(undefined)
@@ -55,7 +55,7 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const updateTransaction = useCallback(
-    async (id: string, transaction: Partial<Transaction>) => {
+    async (id: number, transaction: Partial<Transaction>) => {
       setLoading(true)
       setError(null)
       try {
@@ -72,7 +72,7 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
     []
   )
 
-  const deleteTransaction = useCallback(async (id: string) => {
+  const deleteTransaction = useCallback(async (id: number) => {
     setLoading(true)
     setError(null)
     try {
