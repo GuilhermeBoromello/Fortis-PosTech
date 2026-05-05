@@ -16,7 +16,7 @@ export default function Sidebar() {
 
   return (
     <nav className="bg-primary-dark h-dvh px-2 py-6 flex flex-col justify-between items-center">
-      <div className="w-12 h-12 bg-background rounded-full"></div>
+      <div className="w-12 h-12 bg-background rounded-full flex items-center justify-center"><p className="text-xl text-text-primary">FI</p></div>
 
       <ul className="space-y-4">
         {
