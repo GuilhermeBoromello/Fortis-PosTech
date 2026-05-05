@@ -10,14 +10,22 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import Link from "next/link"
-import { ArrowRight, Eye, EyeClosed } from "lucide-react"
+import { ArrowRight, Eye, EyeClosed, Pencil, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/Badge/Badge"
 import { useTransactions } from "@/context/TransactionContext"
+import TransactionModal from "@/components/ui/TransactionModal/TransactionModal"
+import { Transaction } from "@/types/transaction"
 
 export default function Home() {
     const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(true)
-    const { transactions, loading, error, getTransactions } = useTransactions()
+    const { transactions, loading, error, getTransactions, deleteTransaction } =
+        useTransactions()
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [modalMode, setModalMode] = useState<"add" | "edit" | "view">("add")
+    const [selectedTransaction, setSelectedTransaction] = useState<
+        Transaction | undefined
+    >(undefined)
 
     useEffect(() => {
         getTransactions()
@@ -39,6 +47,29 @@ export default function Home() {
         completed: { variant: "success" as const, label: "Concluída" },
         pending: { variant: "warning" as const, label: "Pendente" },
         failed: { variant: "danger" as const, label: "Falhou" },
+    }
+
+    const handleView = (transaction: Transaction) => {
+        setSelectedTransaction(transaction)
+        setModalMode("view")
+        setIsModalOpen(true)
+    }
+
+    const handleEdit = (transaction: Transaction) => {
+        setSelectedTransaction(transaction)
+        setModalMode("edit")
+        setIsModalOpen(true)
+    }
+
+    const handleDelete = async (id: number) => {
+        await deleteTransaction(id)
+        getTransactions()
+    }
+
+    const handleOpenAdd = () => {
+        setSelectedTransaction(undefined)
+        setModalMode("add")
+        setIsModalOpen(true)
     }
 
     const renderContent = (): ReactElement => {
@@ -65,6 +96,9 @@ export default function Home() {
                             <TableHead className="text-text-inverse">
                                 Status
                             </TableHead>
+                            <TableHead className="w-[120px] text-text-inverse">
+                                Ações
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -86,11 +120,51 @@ export default function Home() {
                                 <TableCell>
                                     <Badge
                                         variant={
-                                            statusConfig["completed"].variant
+                                            statusConfig[transaction.status]
+                                                .variant
                                         }
                                     >
-                                        {statusConfig["completed"].label}
+                                        {statusConfig[transaction.status].label}
                                     </Badge>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            title="Visualizar detalhes"
+                                            onClick={() =>
+                                                handleView(transaction)
+                                            }
+                                        >
+                                            <Eye size={16} />
+                                        </Button>
+
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            title="Editar"
+                                            onClick={() =>
+                                                handleEdit(transaction)
+                                            }
+                                        >
+                                            <Pencil size={16} />
+                                        </Button>
+
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            title="Deletar"
+                                            onClick={() =>
+                                                handleDelete(transaction.id)
+                                            }
+                                        >
+                                            <Trash2
+                                                size={16}
+                                                className="text-danger"
+                                            />
+                                        </Button>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -109,7 +183,7 @@ export default function Home() {
             {/* CARD DO SALDO */}
             <div className="bg-primary-dark flex flex-col gap-8 rounded-md p-8 text-text-inverse">
                 <div className="flex justify-between items-center">
-                    <h1 className="text-2xl">Olá, Guilherme!</h1>
+                    <h1 className="text-2xl">Olá, FIAP!</h1>
 
                     <Link
                         href={"/transactions"}
@@ -158,8 +232,17 @@ export default function Home() {
             <div className="space-y-2 overflow-auto">
                 <div className="flex items-center gap-4">
                     <h3>Últimas transações</h3>
-                    <Button variant="default">Adicionar</Button>
+                    <Button variant="default" onClick={handleOpenAdd}>
+                        Adicionar
+                    </Button>
                 </div>
+
+                <TransactionModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    mode={modalMode}
+                    transaction={selectedTransaction}
+                />
 
                 {renderContent()}
             </div>
