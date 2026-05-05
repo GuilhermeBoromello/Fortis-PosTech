@@ -10,6 +10,7 @@ import {
 import { Transaction } from '@/types/transaction'
 import * as api from '@/services/api'
 
+// Criação com os estados para controlar o loading e possiveis erros ao realizar as operações
 interface TransactionContextType {
   transactions: Transaction[]
   loading: boolean
@@ -104,7 +105,7 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
 export function useTransactions() {
   const context = useContext(TransactionContext)
   if (!context) {
-    throw new Error('useTransactions must be used within a TransactionProvider')
+    throw new Error('useTransactions deve ser utilizado dentro de um TransactionProvider')
   }
   return context
 }
