@@ -60,15 +60,19 @@ O Storybook ficará disponível em http://localhost:6006
 ```
 src/
 ├── app/                    # App Router (Next.js 14)
+│   ├── (auth)/
+│   │   └── login/
+│   └── (dashboard)/
+│       ├── page.tsx
+│       └── transactions/
 │   ├── layout.tsx          # Layout raiz com fonte Inter
-│   ├── page.tsx            # Dashboard principal
-│   ├── transactions/       # Página de transações
 │   └── globals.css         # Estilos globais
 ├── components/
 │   ├── ui/                 # Componentes de UI reutilizáveis
 │   │   ├── Button/         # Botão com variantes e stories
 │   │   ├── Badge/          # Badge de status com stories
 │   │   └── Input/          # Input com label e validação
+│   │   └── TransactionModal/
 │   └── layout/             # Componentes de layout
 │       ├── Header/         # Header com navegação
 │       └── Sidebar/        # Sidebar com menu lateral
