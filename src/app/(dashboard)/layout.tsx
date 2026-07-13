@@ -14,10 +14,10 @@ export default function DashboardLayout({
             <div className="flex flex-col h-screen">
                 <Header />
 
-                <div className="flex h-screen">
+                <div className="flex flex-1 overflow-hidden">
                     <Sidebar />
 
-                    <main className="w-full py-4 px-8">
+                    <main className="w-full overflow-y-auto py-4 px-8">
                         {children}
                     </main>
                 </div>

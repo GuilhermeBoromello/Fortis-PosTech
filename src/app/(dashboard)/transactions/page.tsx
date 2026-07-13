@@ -84,12 +84,6 @@ export default () => {
                 />
 
                 {renderContent()}
-
-                {!error && (
-                    <p className="text-xs text-gray-400 mt-2">
-                        Total de registros: {transactions.length}
-                    </p>
-                )}
             </div>
         </div>
     )

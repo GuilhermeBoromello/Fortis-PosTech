@@ -1,6 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react"
+import React, { useMemo, useRef } from "react"
 import { AgGridReact } from "ag-grid-react"
 import {
+    AllCommunityModule,
+    ModuleRegistry,
     type ColDef,
     type ICellRendererParams,
 } from "ag-grid-community"
@@ -9,6 +11,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react"
 import { StatusType, Transaction, TransferType } from "@/types/transaction"
 import { useTransactions } from "@/context/TransactionContext"
 
+ModuleRegistry.registerModules([AllCommunityModule])
 type HandleFunction = (transaction: Transaction) => void
 
 interface TransactionGridProps {
@@ -80,7 +83,6 @@ const typeCell = ({
 
 const TransactionGrid = ({ transactions, onView, onEdit, onDelete }: TransactionGridProps) => {
     const { searchTerm } = useTransactions()
-    console.log("searchTerm no grid:", searchTerm)
     const gridRef = useRef<AgGridReact>(null)
 
     function formatDate(isoDate: string): string {
@@ -181,18 +183,13 @@ const TransactionGrid = ({ transactions, onView, onEdit, onDelete }: Transaction
         []
     )
 
-    useEffect(() => {
-        if (gridRef.current?.api) {
-            gridRef.current.api.setGridOption("quickFilterText", searchTerm)
-        }
-    }, [searchTerm])
-
     return (
         <div className="ag-theme-alpine w-full">
             <AgGridReact<Transaction>
                 ref={gridRef}
                 theme="legacy"
                 rowData={transactions}
+                quickFilterText={searchTerm}
                 getRowId={({ data }) => String(data.id)}
                 columnDefs={columnDefs}
                 defaultColDef={defaultColDef}
