@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";
 
 @layer base {
   :root {
@@ -58,4 +60,12 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.ag-theme-alpine-dark .ag-header {
+  margin-bottom: 0 !important;
+}
+
+.ag-theme-alpine-dark .ag-body {
+  margin-top: 0 !important;
 }
