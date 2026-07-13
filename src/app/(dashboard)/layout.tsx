@@ -10,13 +10,11 @@ export default function DashboardLayout({
 }) {
     return (
         <TransactionProvider>
-            <div className="flex min-h-screen max-h-screen">
+            <div className="flex min-h-screen overflow-hidden">
                 <Sidebar />
-                <div className="flex-1 flex flex-col">
-                    <main className="flex-1 px-6 py-4 space-y-4 overflow-hidden flex flex-col">
-                        <Header />
-                        {children}
-                    </main>
+                <div className="flex flex-col flex-1 h-screen overflow-hidden px-6 py-4 space-y-4">
+                    <Header />
+                    <main className="flex-1 overflow-y-auto">{children}</main>
                 </div>
             </div>
         </TransactionProvider>

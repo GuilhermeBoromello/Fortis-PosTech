@@ -1,9 +1,13 @@
 // Interface Transação (id gerado automaticamente pelo json-server)
+
+export type StatusType = "completed" | "pending" | "failed"
+export type TransferType = "deposit" | "transfer"
+
 export interface Transaction {
-  id: number
-  type: 'deposit' | 'transfer'
-  amount: number
-  date: string
-  description: string
-  status: 'completed' | 'pending' | 'failed'
+    id: number
+    type: TransferType
+    amount: number
+    date: string
+    description: string
+    status: StatusType
 }
