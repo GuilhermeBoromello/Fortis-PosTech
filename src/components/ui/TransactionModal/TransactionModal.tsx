@@ -13,6 +13,10 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useTransactions } from "@/context/TransactionContext"
 import { Transaction } from "@/types/transaction"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { type TransactionFormData, transactionSchema } from "@/schemas/transaction.schema"
+import type { Resolver } from "react-hook-form"
 
 type ModalMode = "add" | "edit" | "view"
 
@@ -31,26 +35,23 @@ export default function TransactionModal({
 }: TransactionModalProps) {
     const { addTransaction, updateTransaction } = useTransactions()
 
-    const [description, setDescription] = useState("")
-    const [amount, setAmount] = useState("")
-    const [date, setDate] = useState("")
-    const [type, setType] = useState("")
-    const [status, setStatus] = useState("")
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<TransactionFormData>({
+        resolver: zodResolver(
+            transactionSchema
+        ) as Resolver<TransactionFormData>,
+    })
 
     // Preenche os campos quando for editar ou visualizar
     useEffect(() => {
         if (transaction) {
-            setDescription(transaction.description)
-            setAmount(String(transaction.amount))
-            setDate(transaction.date.split("T")[0]) // formata para yyyy-mm-dd
-            setType(transaction.type)
-            setStatus(transaction.status)
+            reset(transaction)
+            // setDescription(transaction.description)
+            // setAmount(String(transaction.amount))
+            // setDate(transaction.date.split("T")[0]) // formata para yyyy-mm-dd
+            // setType(transaction.type)
+            // setStatus(transaction.status)
         } else {
-            setDescription("")
-            setAmount("")
-            setDate("")
-            setType("")
-            setStatus("")
+            reset()
         }
     }, [transaction, isOpen])
 
@@ -62,25 +63,13 @@ export default function TransactionModal({
         view: "Detalhes da transação",
     }
 
-    const handleSubmit = async () => {
+    const onSubmit = async (fields: TransactionFormData) => {
         if (mode === "add") {
-            await addTransaction({
-                description,
-                amount: parseFloat(amount),
-                date,
-                type: type as Transaction["type"],
-                status: status as Transaction["status"],
-            })
+            await addTransaction(fields)
         }
 
         if (mode === "edit" && transaction) {
-            await updateTransaction(transaction.id, {
-                description,
-                amount: parseFloat(amount),
-                date,
-                type: type as Transaction["type"],
-                status: status as Transaction["status"],
-            })
+            await updateTransaction(transaction.id, fields)
         }
 
         onClose()
@@ -99,10 +88,14 @@ export default function TransactionModal({
                         <label className="text-sm font-medium">Descrição</label>
                         <Input
                             placeholder="Descrição da transação"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
                             disabled={isDisabled}
+                            {...register("description")}
                         />
+                        {errors.description && (
+                            <p className="text-xs text-danger">
+                                {errors.description.message}
+                            </p>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-1.5">
@@ -112,27 +105,34 @@ export default function TransactionModal({
                         <Input
                             type="number"
                             placeholder="0,00"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
                             disabled={isDisabled}
+                            {...register("amount")}
                         />
+                        {errors.amount && (
+                            <p className="text-xs text-danger">
+                                {errors.amount.message}
+                            </p>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-1.5">
                         <label className="text-sm font-medium">Data</label>
                         <Input
                             type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
                             disabled={isDisabled}
+                            {...register("date")}
                         />
+                        {errors.date && (
+                            <p className="text-xs text-danger">
+                                {errors.date.message}
+                            </p>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-1.5">
                         <label className="text-sm font-medium">Tipo</label>
                         <select
-                            value={type}
-                            onChange={(e) => setType(e.target.value)}
+                            {...register("type")}
                             disabled={isDisabled}
                             className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
                         >
@@ -141,14 +141,20 @@ export default function TransactionModal({
                             </option>
                             <option value="deposit">Depósito</option>
                             <option value="transfer">Transferência</option>
+                            <option value="withdrawal">Saque</option>
+                            <option value="payment">Pagamento</option>
                         </select>
+                        {errors.type && (
+                            <p className="text-xs text-danger">
+                                {errors.type.message}
+                            </p>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-1.5">
                         <label className="text-sm font-medium">Status</label>
                         <select
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
+                            {...register("status")}
                             disabled={isDisabled}
                             className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
                         >
@@ -159,6 +165,11 @@ export default function TransactionModal({
                             <option value="pending">Pendente</option>
                             <option value="failed">Falhou</option>
                         </select>
+                        {errors.status && (
+                            <p className="text-xs text-danger">
+                                {errors.status.message}
+                            </p>
+                        )}
                     </div>
                 </div>
 
@@ -167,7 +178,10 @@ export default function TransactionModal({
                         {mode === "view" ? "Fechar" : "Cancelar"}
                     </Button>
                     {mode !== "view" && (
-                        <Button variant="default" onClick={handleSubmit}>
+                        <Button
+                            variant="default"
+                            onClick={handleSubmit(onSubmit)}
+                        >
                             Salvar
                         </Button>
                     )}
