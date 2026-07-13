@@ -1,18 +1,13 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useRef } from "react"
 import { AgGridReact } from "ag-grid-react"
 import {
-    AllCommunityModule,
-    ModuleRegistry,
     type ColDef,
     type ICellRendererParams,
-    type RowSelectionOptions,
-    type SelectionChangedEvent,
-    type SelectionColumnDef,
 } from "ag-grid-community"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Eye, EyeClosed, Pencil, Trash2 } from "lucide-react"
+import { Eye, Pencil, Trash2 } from "lucide-react"
 import { StatusType, Transaction, TransferType } from "@/types/transaction"
-import transactions from "@/data/transactions.json"
+import { useTransactions } from "@/context/TransactionContext"
 
 type HandleFunction = (transaction: Transaction) => void
 
@@ -46,7 +41,8 @@ const TYPE_BADGE: Record<TransferType, { label: string; className: string }> = {
     },
     transfer: {
         label: "Transferência",
-        className: "text-primary-dark bg-primary-dark/10 border-primary-dark/25",
+        className:
+            "text-primary-dark bg-primary-dark/10 border-primary-dark/25",
     },
 }
 
@@ -82,12 +78,11 @@ const typeCell = ({
     )
 }
 
-const TransactionGrid = ({
-    transactions,
-    onView,
-    onEdit,
-    onDelete,
-}: TransactionGridProps) => {
+const TransactionGrid = ({ transactions, onView, onEdit, onDelete }: TransactionGridProps) => {
+    const { searchTerm } = useTransactions()
+    console.log("searchTerm no grid:", searchTerm)
+    const gridRef = useRef<AgGridReact>(null)
+
     function formatDate(isoDate: string): string {
         const [year, month, day] = isoDate.slice(0, 10).split("-")
         return `${day}/${month}/${year}`
@@ -186,9 +181,16 @@ const TransactionGrid = ({
         []
     )
 
+    useEffect(() => {
+        if (gridRef.current?.api) {
+            gridRef.current.api.setGridOption("quickFilterText", searchTerm)
+        }
+    }, [searchTerm])
+
     return (
         <div className="ag-theme-alpine w-full">
             <AgGridReact<Transaction>
+                ref={gridRef}
                 theme="legacy"
                 rowData={transactions}
                 getRowId={({ data }) => String(data.id)}
