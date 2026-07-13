@@ -9,6 +9,8 @@ import { useTransactions } from "@/context/TransactionContext"
 import TransactionModal from "@/components/ui/TransactionModal/TransactionModal"
 import { Transaction } from "@/types/transaction"
 import TransactionGrid from "@/components/transactions/TransactionGrid"
+import MonthlyChart from "@/components/ui/Charts/MonthlyChart/MonthlyChart"
+import ExpenseByTypeChart from "@/components/ui/Charts/ExpenseByTypeChart/ExpenseByTypeChart"
 
 export default function Home() {
     const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(true)
@@ -120,6 +122,12 @@ export default function Home() {
                         <p className="text-xs">Rendendo 102% do CDI</p>
                     </div>
                 </div>
+            </div>
+
+            <div className="w-full flex items-center gap-8">
+                <MonthlyChart transactions={transactions} />
+
+                <ExpenseByTypeChart transactions={transactions} />
             </div>
 
             {/* TABELA */}

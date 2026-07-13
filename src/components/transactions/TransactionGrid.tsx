@@ -26,7 +26,7 @@ interface TransactionGridProps {
 const STATUS_BADGE: Record<StatusType, { label: string; className: string }> = {
     completed: {
         label: "Concluído",
-        className: "text-success bg-success-light border-success/25",
+        className: "text-primary bg-primary-light border-primary/25",
     },
     failed: {
         label: "Falhou",
@@ -34,18 +34,19 @@ const STATUS_BADGE: Record<StatusType, { label: string; className: string }> = {
     },
     pending: {
         label: "Pendente",
-        className: "text-warning bg-warning-light border-warning/25",
+        className:
+            "text-primary-dark bg-primary-dark/10 border-primary-dark/25",
     },
 }
 
 const TYPE_BADGE: Record<TransferType, { label: string; className: string }> = {
     deposit: {
         label: "Depósito",
-        className: "text-success bg-success-light border-success/25",
+        className: "text-primary bg-primary-light border-primary/25",
     },
     transfer: {
         label: "Transferência",
-        className: "text-danger bg-danger-light border-danger/25",
+        className: "text-primary-dark bg-primary-dark/10 border-primary-dark/25",
     },
 }
 
