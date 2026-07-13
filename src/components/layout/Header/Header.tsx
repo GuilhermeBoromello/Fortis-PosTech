@@ -3,7 +3,7 @@ import { Landmark } from "lucide-react"
 
 export default function Header() {
     return (
-        <header className="bg-primary flex px-6 py-3 w-full justify-between items-center min-h-12">
+        <header className="bg-primary flex px-6 py-3 w-full justify-between items-center">
             <div className="flex gap-2 items-center">
                 <Landmark size={36} color="#FFF" />
                 <h1 className="font-bold text-white tracking-wide">Fortis</h1>
