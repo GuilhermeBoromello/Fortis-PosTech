@@ -1,7 +1,7 @@
 // Interface Transação (id gerado automaticamente pelo json-server)
 
 export type StatusType = "completed" | "pending" | "failed"
-export type TransferType = "deposit" | "transfer"
+export type TransferType = "deposit" | "transfer" | "withdrawal" | "payment"
 
 export interface Transaction {
     id: number
