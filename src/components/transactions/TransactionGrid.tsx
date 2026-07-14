@@ -150,7 +150,10 @@ const TransactionGrid = ({ transactions, onView, onEdit, onDelete }: Transaction
                 sortable: false,
                 cellRenderer: ({ data }: ICellRendererParams<Transaction>) =>
                     data ? (
-                        <div className="flex h-full items-center gap-3">
+                        <div
+                            className="flex h-full items-center gap-3"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -180,7 +183,7 @@ const TransactionGrid = ({ transactions, onView, onEdit, onDelete }: Transaction
                     ) : null,
             },
         ],
-        [onView, onEdit]
+        [onView, onEdit, onDelete]
     )
 
     const defaultColDef = useMemo<ColDef<Transaction>>(
