@@ -42,22 +42,29 @@ export default function TransactionModal({
         register,
         handleSubmit,
         formState: { errors },
+        setValue,
         reset,
+        watch,
     } = useForm<TransactionFormData>({
         resolver: zodResolver(
             transactionSchema
         ) as Resolver<TransactionFormData>,
     })
 
+    const typeValue = watch("type")
+    const statusValue = watch("status")
+
     // Preenche os campos quando for editar ou visualizar
     useEffect(() => {
         if (transaction) {
             const { id, ...fields } = transaction
-            reset(          )
+            reset(fields)
+            setValue("type", transaction.type)
+            setValue("status", transaction.status)
         } else {
             reset()
         }
-    }, [transaction, isOpen, reset])
+    }, [transaction, isOpen, reset, setValue])
 
     const isDisabled = mode === "view"
 
@@ -142,6 +149,7 @@ export default function TransactionModal({
                         <label className="text-sm font-medium">Tipo</label>
                         <select
                             {...register("type")}
+                            value={typeValue}
                             disabled={isDisabled}
                             className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
                         >
@@ -164,6 +172,7 @@ export default function TransactionModal({
                         <label className="text-sm font-medium">Status</label>
                         <select
                             {...register("status")}
+                            value={statusValue}
                             disabled={isDisabled}
                             className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
                         >
