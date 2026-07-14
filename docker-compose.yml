@@ -1,0 +1,31 @@
+services:
+    api:
+        image: node:lts-alpine
+        working_dir: /app
+        volumes:
+            - ./src/data:/app/data
+        command: sh -c "npm install -g json-server && json-server data/transactions.json --port 3001 --host 0.0.0.0"
+        healthcheck:
+            test: ["CMD", "wget", "--spider", "-q", "http://localhost:3001/transactions"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        networks:
+            - internal
+    frontend:
+        build: 
+            context: .
+            args:
+                API_URL: http://api:3001
+        ports:
+            - "3000:3000"
+        env_file:
+            - .env.docker
+        depends_on:
+            api:
+                condition: service_healthy
+        networks:
+            - internal
+networks:
+    internal:
+        driver: bridge

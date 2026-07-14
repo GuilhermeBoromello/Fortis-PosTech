@@ -47,6 +47,14 @@ const TYPE_BADGE: Record<TransferType, { label: string; className: string }> = {
         className:
             "text-primary-dark bg-primary-dark/10 border-primary-dark/25",
     },
+    withdrawal: {
+        label: "Saque",
+        className: "text-warning bg-warning-light border-warning/25",
+    },
+    payment: {
+        label: "Pagamento",
+        className: "text-danger bg-danger-light border-danger/25",
+    },
 }
 
 const statusCell = ({
