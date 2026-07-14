@@ -24,6 +24,7 @@ export const transactionSchema = z.object({
     type: z.enum(["deposit", "transfer", "withdrawal", "payment"]),
 
     status: z.enum(["completed", "pending", "failed"]),
+    file: z.instanceof(FileList).optional(),
 })
 
 export type TransactionFormData = z.infer<typeof transactionSchema>

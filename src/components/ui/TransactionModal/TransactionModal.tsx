@@ -15,7 +15,10 @@ import { useTransactions } from "@/context/TransactionContext"
 import { Transaction } from "@/types/transaction"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type TransactionFormData, transactionSchema } from "@/schemas/transaction.schema"
+import {
+    type TransactionFormData,
+    transactionSchema,
+} from "@/schemas/transaction.schema"
 import type { Resolver } from "react-hook-form"
 
 type ModalMode = "add" | "edit" | "view"
@@ -35,7 +38,12 @@ export default function TransactionModal({
 }: TransactionModalProps) {
     const { addTransaction, updateTransaction } = useTransactions()
 
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<TransactionFormData>({
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm<TransactionFormData>({
         resolver: zodResolver(
             transactionSchema
         ) as Resolver<TransactionFormData>,
@@ -44,16 +52,12 @@ export default function TransactionModal({
     // Preenche os campos quando for editar ou visualizar
     useEffect(() => {
         if (transaction) {
-            reset(transaction)
-            // setDescription(transaction.description)
-            // setAmount(String(transaction.amount))
-            // setDate(transaction.date.split("T")[0]) // formata para yyyy-mm-dd
-            // setType(transaction.type)
-            // setStatus(transaction.status)
+            const { id, ...fields } = transaction
+            reset(          )
         } else {
             reset()
         }
-    }, [transaction, isOpen])
+    }, [transaction, isOpen, reset])
 
     const isDisabled = mode === "view"
 
@@ -64,12 +68,17 @@ export default function TransactionModal({
     }
 
     const onSubmit = async (fields: TransactionFormData) => {
+        const { file, ...transactionData } = fields
+
         if (mode === "add") {
-            await addTransaction(fields)
+            await addTransaction(transactionData as Omit<Transaction, "id">)
         }
 
         if (mode === "edit" && transaction) {
-            await updateTransaction(transaction.id, fields)
+            await updateTransaction(
+                transaction.id,
+                transactionData as Partial<Transaction>
+            )
         }
 
         onClose()
@@ -168,6 +177,25 @@ export default function TransactionModal({
                         {errors.status && (
                             <p className="text-xs text-danger">
                                 {errors.status.message}
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                        <label htmlFor="anexo" className="text-sm font-medium">
+                            Recibo / Anexo
+                        </label>
+                        <input
+                            id="anexo"
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            disabled={isDisabled}
+                            className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50"
+                            {...register("file")}
+                        />
+                        {errors.file && (
+                            <p className="text-xs text-danger">
+                                {errors.file.message}
                             </p>
                         )}
                     </div>
