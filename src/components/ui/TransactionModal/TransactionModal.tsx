@@ -84,7 +84,10 @@ export default function TransactionModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-2xl">
+            <DialogContent
+                className="max-w-2xl"
+                overlayClassName="bg-black/60"
+            >
                 <DialogHeader>
                     <DialogTitle>{titles[mode]}</DialogTitle>
                 </DialogHeader>
