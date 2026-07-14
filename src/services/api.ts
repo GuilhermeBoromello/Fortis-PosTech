@@ -1,6 +1,6 @@
 import { Transaction } from '@/types/transaction'
 
-const BASE_URL = 'http://localhost:3001'
+const BASE_URL = "/api"
 
 export async function getTransactions(): Promise<Transaction[]> {
     const response = await fetch(`${BASE_URL}/transactions`)
