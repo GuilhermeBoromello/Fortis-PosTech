@@ -22,6 +22,15 @@ import type { Resolver } from "react-hook-form"
 
 type ModalMode = "add" | "edit" | "view"
 
+const EMPTY_FORM = {
+    description: "",
+    amount: undefined,
+    date: "",
+    type: "",
+    status: "",
+    file: undefined,
+} as unknown as TransactionFormData
+
 interface TransactionModalProps {
     isOpen: boolean
     onClose: () => void
@@ -53,7 +62,7 @@ export default function TransactionModal({
             const { id, ...fields } = transaction
             reset(fields)
         } else {
-            reset()
+            reset(EMPTY_FORM)
         }
     }, [transaction, isOpen, reset])
 
