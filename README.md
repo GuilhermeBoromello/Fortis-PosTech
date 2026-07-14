@@ -38,7 +38,7 @@ Sistema de gestão de transações financeiras desenvolvido como Tech Challenge 
 - Editar transação existente
 - Visualizar detalhes da transação
 - Deletar transação
-- Upload de recibo/anexo (demonstrativo — em produção seria enviado para AWS S3)
+- Upload de recibo/anexo (demonstrativo — em produção seria enviado para Vercel Blob)
 
 ### Segurança
 - Autenticação por CPF com sessão via cookie
