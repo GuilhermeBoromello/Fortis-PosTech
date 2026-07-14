@@ -7,7 +7,6 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter,
-    DialogOverlay,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -42,29 +41,21 @@ export default function TransactionModal({
         register,
         handleSubmit,
         formState: { errors },
-        setValue,
         reset,
-        watch,
     } = useForm<TransactionFormData>({
         resolver: zodResolver(
             transactionSchema
         ) as Resolver<TransactionFormData>,
     })
 
-    const typeValue = watch("type")
-    const statusValue = watch("status")
-
-    // Preenche os campos quando for editar ou visualizar
     useEffect(() => {
         if (transaction) {
             const { id, ...fields } = transaction
             reset(fields)
-            setValue("type", transaction.type)
-            setValue("status", transaction.status)
         } else {
             reset()
         }
-    }, [transaction, isOpen, reset, setValue])
+    }, [transaction, isOpen, reset])
 
     const isDisabled = mode === "view"
 
@@ -93,7 +84,6 @@ export default function TransactionModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogOverlay className="bg-black/60" />
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>{titles[mode]}</DialogTitle>
@@ -149,7 +139,6 @@ export default function TransactionModal({
                         <label className="text-sm font-medium">Tipo</label>
                         <select
                             {...register("type")}
-                            value={typeValue}
                             disabled={isDisabled}
                             className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
                         >
@@ -172,7 +161,6 @@ export default function TransactionModal({
                         <label className="text-sm font-medium">Status</label>
                         <select
                             {...register("status")}
-                            value={statusValue}
                             disabled={isDisabled}
                             className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50"
                         >
